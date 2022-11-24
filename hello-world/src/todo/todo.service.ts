@@ -4,23 +4,27 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodoService {
+  // por enquanto, os dados são guardados na memória
+  private todos: CreateTodoDto[] = [];
+
   create(createTodoDto: CreateTodoDto) {
-    this;
+    this.todos.push(createTodoDto);
   }
 
   findAll() {
-    return `This action returns all todo`;
+    return this.todos;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} todo`;
+    return this.todos.at(id);
   }
 
   update(id: number, updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+    this.todos[id] = updateTodoDto;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} todo`;
+    const removedItem = this.todos[id];
+    this.todos = this.todos.filter((item) => item !== removedItem);
   }
 }
