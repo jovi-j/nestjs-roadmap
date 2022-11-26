@@ -10,6 +10,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('locale-date-string')
+  getDateString(): string {
+    return this.appService.getDateString();
+  }
+
   @Get('/admin')
   @Redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 301)
   getAdmin() {}
