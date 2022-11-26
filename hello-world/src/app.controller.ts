@@ -11,8 +11,8 @@ export class AppController {
   }
 
   @Get('locale-date-string')
-  getDate(): string {
-    return this.appService.getDate();
+  getDateString(): string {
+    return this.appService.getDateString();
   }
 
   @Get('/admin')
