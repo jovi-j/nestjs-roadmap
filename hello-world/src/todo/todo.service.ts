@@ -1,30 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Prisma, Todo } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class TodoService {
-  // por enquanto, os dados são guardados na memória
-  private todos: CreateTodoDto[] = [];
+  constructor(private prisma: PrismaService) { }
 
-  create(createTodoDto: CreateTodoDto) {
-    this.todos.push(createTodoDto);
+  async create(data: Prisma.TodoCreateInput): Promise<Todo> {
+    return this.prisma.todo.create({data});
   }
 
-  findAll() {
-    return this.todos;
+  async findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.TodoWhereUniqueInput;
+    where?: Prisma.TodoWhereInput;
+    orderBy?: Prisma.TodoOrderByWithRelationInput;
+  }): Promise<Todo[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.todo.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  findOne(id: number) {
-    return this.todos.at(id);
+  async findOne(todoWhereUniqueInput: Prisma.TodoWhereUniqueInput): Promise<Todo | null> {
+    return this.prisma.todo.findUnique({ where: todoWhereUniqueInput })
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    this.todos[id] = updateTodoDto;
+  async update(params:{
+    where: Prisma.TodoWhereUniqueInput,
+    data: Prisma.TodoUpdateInput;
+    }):Promise<Todo> {
+    const {data, where} = params;
+    return this.prisma.todo.update({
+      data,
+      where
+    })
   }
 
-  remove(id: number) {
-    const removedItem = this.todos[id];
-    this.todos = this.todos.filter((item) => item !== removedItem);
+  async finalizarTarefa(todoWhereUniqueInput: Prisma.TodoWhereUniqueInput): Promise<Todo | null> {
+    return this.prisma.todo.update({
+      data:{finalizado: true},
+      where: todoWhereUniqueInput
+    })
+  }
+
+  async remove(where: Prisma.TodoWhereUniqueInput): Promise<Todo> {
+    return this.prisma.todo.delete({where});
   }
 }
