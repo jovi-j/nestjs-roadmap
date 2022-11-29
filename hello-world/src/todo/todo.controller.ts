@@ -14,6 +14,7 @@ import { Todo as TodoModel } from '@prisma/client';
 export class TodoController {
   constructor(private readonly todoService: TodoService) { }
 
+  // Crud normal
   @Post()
   create(@Body() todoData: { titulo: string, nomeResponsavel: string }): Promise<TodoModel> {
     const { titulo, nomeResponsavel } = todoData;
@@ -47,13 +48,29 @@ export class TodoController {
     });
   }
 
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<TodoModel> {
+    return this.todoService.remove({ id: Number(id) });
+  }
+
+  // Crud normal
+ 
+  // Coisas do Todo
   @Patch('/finalizar/:id')
   async finalizarTarefa(@Param('id') id: string): Promise<TodoModel> {
     return this.todoService.finalizarTarefa({ id: Number(id) });
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string): Promise<TodoModel> {
-    return this.todoService.remove({ id: Number(id) });
+
+  @Get('/porPessoa/:nomePessoa')
+  async getTodosPorPessoa(@Param('nomePessoa') nomePessoa: string): Promise<TodoModel[]> {
+    return this.todoService.findAll(
+      {
+        where: {
+          pessoaResponsavel: { nome: nomePessoa }
+        }
+      })
   }
+
+
 }

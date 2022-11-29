@@ -7,7 +7,7 @@ export class PessoaService {
   constructor(private prisma: PrismaService) { }
 
   async create(data: Prisma.PessoaCreateInput): Promise<Pessoa> {
-    return this.prisma.pessoa.create({data});
+    return this.prisma.pessoa.create({ data });
   }
 
   async findAll(params: {
@@ -25,11 +25,11 @@ export class PessoaService {
     return this.prisma.pessoa.findUnique({ where: pessoaWhereUniqueInput })
   }
 
-  async update(params:{
+  async update(params: {
     where: Prisma.PessoaWhereUniqueInput,
     data: Prisma.PessoaUpdateInput;
-    }):Promise<Pessoa> {
-    const {data, where} = params;
+  }): Promise<Pessoa> {
+    const { data, where } = params;
     return this.prisma.pessoa.update({
       data,
       where
@@ -37,6 +37,6 @@ export class PessoaService {
   }
 
   async remove(where: Prisma.PessoaWhereUniqueInput): Promise<Pessoa> {
-    return this.prisma.pessoa.delete({where});
+    return this.prisma.pessoa.delete({ where });
   }
 }

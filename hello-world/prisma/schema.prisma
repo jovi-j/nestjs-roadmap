@@ -11,15 +11,15 @@ datasource db {
 }
 
 model Todo {
-  id            Int       @id @default(autoincrement())
-  titulo        String
-  finalizado    Boolean   @default(false)
-  pessoaResponsavel   Pessoa?   @relation(fields: [pessoaId], references: [id])
-  pessoaId Int?
+  id                Int     @id @default(autoincrement())
+  titulo            String
+  finalizado        Boolean @default(false)
+  pessoaResponsavel Pessoa? @relation(fields: [pessoaId], references: [id])
+  pessoaId          Int?
 }
 
-model Pessoa{
- id             Int       @id @default(autoincrement())
- nome           String    @unique
- todos Todo[]
+model Pessoa {
+  id    Int    @id @default(autoincrement())
+  nome  String @unique
+  todos Todo[]
 }

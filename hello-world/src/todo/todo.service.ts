@@ -43,6 +43,7 @@ export class TodoService {
     })
   }
 
+
   async remove(where: Prisma.TodoWhereUniqueInput): Promise<Todo> {
     return this.prisma.todo.delete({where});
   }
