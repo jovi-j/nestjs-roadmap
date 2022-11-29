@@ -1,30 +1,45 @@
 <script>
-	export let name;
+  async function getAllTodos() {
+    const res = await fetch(`http://localhost:3000/todo/`);
+    const todos = await res.json();
+
+    if (res.ok) {
+      return todos;
+    } else {
+      throw new Error(text);
+    }
+  }
+
+  let promise = getAllTodos();
+
+  function handleClick() {
+    promise = getAllTodos();
+  }
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+  <button on:click={handleClick}> get all todos </button>
+
+  <p>todos:</p>
+  <p>
+    {#await promise}
+      <p>...waiting</p>
+    {:then todos}
+      {#each todos as todo}
+        <h1>Todo:</h1>
+        <p>{todo.titulo}</p>
+        <h3>Resp.:</h3>
+        <p>{todo.pessoaId}</p>
+        <p>Finalizado? 
+        {#if todo.finalizado}
+          ✅
+        {:else}
+          ❌
+        {/if}
+        </p>
+      {/each}
+    {:catch error}
+      <p style="color: red">{error.message}</p>
+    {/await}
+  </p>
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
