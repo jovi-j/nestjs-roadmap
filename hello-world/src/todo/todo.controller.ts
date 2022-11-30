@@ -29,7 +29,7 @@ export class TodoController {
 
   @Get()
   async findAll(): Promise<TodoModel[]> {
-    return this.todoService.findAll({})
+    return this.todoService.findAll({include:{pessoaResponsavel: true}})
   }
 
   @Get(':id')
