@@ -1,4 +1,10 @@
 <script>
+  import { onMount } from "svelte";
+  import { Label } from "@smui/button";
+  import Checkbox from "@smui/checkbox";
+  import FormField from "@smui/form-field";
+
+  let checked = [];
   async function getAllTodos() {
     const res = await fetch(`http://localhost:3000/todo/`);
     const todos = await res.json();
@@ -12,34 +18,32 @@
 
   let promise = getAllTodos();
 
-  function handleClick() {
-    promise = getAllTodos();
-  }
+  onMount(getAllTodos);
 </script>
 
 <main>
-  <button on:click={handleClick}> get all todos </button>
-
-  <p>todos:</p>
-  <p>
+  <h1>Todos</h1>
+  <div class="container-flex">
     {#await promise}
-      <p>...waiting</p>
+      <Label>Fetching todos...</Label>
     {:then todos}
       {#each todos as todo}
-        <h1>Todo:</h1>
-        <p>{todo.titulo}</p>
-        <h3>Resp.:</h3>
-        <p>{todo.pessoaId}</p>
-        <p>Finalizado? 
-        {#if todo.finalizado}
-          ✅
-        {:else}
-          ❌
-        {/if}
-        </p>
+        <form action="" method="post">
+          <div style="margin-top: 1em;">
+            <FormField>
+              <input type="checkbox" name="finalizarTarefa" />
+              <h1>
+                {todo.titulo}
+                <spam style="opacity: 0.4;">
+                  {todo.pessoaResponsavel.nome}</spam
+                >
+              </h1>
+            </FormField>
+          </div>
+        </form>
       {/each}
     {:catch error}
       <p style="color: red">{error.message}</p>
     {/await}
-  </p>
+  </div>
 </main>
